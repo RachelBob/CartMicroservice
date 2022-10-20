@@ -20,9 +20,8 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 
 	@Override
 	public CartItems getCartItemById(long id) {
-		// return repository.findById(id).get();
 
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
+		return repository.findById(id).get();
 	}
 
 	@Override
@@ -39,8 +38,8 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 
 	@Override
 	public CartItems updateCartItem(CartItems cartItems, long id) {
-		CartItems items = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
+		CartItems items = repository.findById(id).get();
+		//CartItems items = repository.findById(id).get().orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
 
 		items.setDescription(cartItems.getDescription());
 		items.setPrice(cartItems.getPrice());
@@ -54,8 +53,7 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 	@Override
 	public void deleteCartItem(Long id) {
 		// check whether a item is in DB or not.
-		repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
-		repository.deleteById(id);
+		repository.findById(id).get();
 	}
 
 }

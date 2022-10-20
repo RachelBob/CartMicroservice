@@ -8,16 +8,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+
+
+@Data
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
 @Table(name="Cartitems ")
+@Builder
 public class CartItems {
 
 	@Id
@@ -34,6 +36,8 @@ public class CartItems {
 
 	private double totalprice;
 	
+	private String uuid;
+	
 	@ManyToOne
 	private Customers customers;
 
@@ -42,7 +46,7 @@ public class CartItems {
 	}
 
 	public CartItems(long cartitem_id, String productname, String description, long quantity, double price,
-			double totalprice, Customers customers) {
+			double totalprice, String uuid, Customers customers) {
 		super();
 		this.cartitem_id = cartitem_id;
 		this.productname = productname;
@@ -50,7 +54,16 @@ public class CartItems {
 		this.quantity = quantity;
 		this.price = price;
 		this.totalprice = totalprice;
+		this.uuid = uuid;
 		this.customers = customers;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
 	}
 
 	public long getCartitem_id() {
@@ -109,13 +122,14 @@ public class CartItems {
 		this.customers = customers;
 	}
 
+
+
+
 	@Override
 	public String toString() {
 		return "CartItems [cartitem_id=" + cartitem_id + ", productname=" + productname + ", description=" + description
-				+ ", quantity=" + quantity + ", price=" + price + ", totalprice=" + totalprice + ", customers="
-				+ customers + "]";
+				+ ", quantity=" + quantity + ", price=" + price + ", totalprice=" + totalprice + ", uuid=" + uuid
+				+ ", customers=" + customers + "]";
 	}
-
-	
 
 }
