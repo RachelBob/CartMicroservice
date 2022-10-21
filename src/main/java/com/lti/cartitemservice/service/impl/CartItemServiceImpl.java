@@ -1,13 +1,12 @@
 package com.lti.cartitemservice.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.lti.cartitemservice.exception.ResourceNotFoundException;
+import com.fasterxml.uuid.Generators;
 import com.lti.cartitemservice.modal.CartItems;
 import com.lti.cartitemservice.repository.CartItemsRepository;
 import com.lti.cartitemservice.service.CartItemService;
@@ -19,27 +18,30 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 	private CartItemsRepository repository;
 
 	@Override
-	public CartItems getCartItemById(long id) {
+	public CartItems getCartItemByUuid(String uuid) {
 
-		return repository.findById(id).get();
+		return repository.findCartItemByUuid(uuid).get();
+		// .orElseThrow(() -> new CartItemNotExistsException("CartItem UUID not
+		// Present"+uuid));
+
 	}
 
 	@Override
 	public List<CartItems> getAllCartItems() {
-		
+
 		return repository.findAll();
 	}
 
 	@Override
 	public CartItems addCardItem(CartItems cartItems) {
-
+		UUID uuid = Generators.timeBasedGenerator().generate();
+		cartItems.setUuid(uuid.toString());
 		return repository.save(cartItems);
-	}
-
-	@Override
-	public CartItems updateCartItem(CartItems cartItems, long id) {
-		CartItems items = repository.findById(id).get();
-		//CartItems items = repository.findById(id).get().orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
+	}	
+	
+	public CartItems updateCartItem(CartItems cartItems, String uuid) {
+		CartItems items = repository.findCartItemByUuid(uuid).get();
+		// .orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
 
 		items.setDescription(cartItems.getDescription());
 		items.setPrice(cartItems.getPrice());
@@ -48,12 +50,13 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 		items.setTotalprice(cartItems.getTotalprice());
 		repository.save(items);
 		return items;
+
 	}
 
 	@Override
-	public void deleteCartItem(Long id) {
-		// check whether a item is in DB or not.
-		repository.findById(id).get();
+	public void deleteCartItem(String uuid) {
+	
+		repository.findCartItemByUuid(uuid).get();
 	}
 
 }

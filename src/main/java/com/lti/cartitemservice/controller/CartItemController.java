@@ -30,17 +30,16 @@ public class CartItemController {
 	@Autowired
 	private CartItemService<CartItems, Long> cartservice;
 
-	// get cart item by id ===> http://localhost:9090/cartitem/5
-	@GetMapping("{cartitem_id}")
-	public ResponseEntity<CartItems> getCartItemId(@PathVariable("cartitem_id") long cartitem_id) {
-		logger.info("CartItem Controller :: getCartItemId : CartItem ID ->  " + cartitem_id);
-		CartItems cartItems = cartservice.getCartItemById(cartitem_id);
+	// get cart item by UUID ===> http://localhost:9090/cartitem/5
+	@GetMapping("{uuid}")
+	public ResponseEntity<CartItems> getCartItemId(@PathVariable("uuid") String uuid) {
+		logger.info("CartItem Controller :: getCartItemId : CartItem UUID ->  " + uuid);
+		CartItems cartItems = cartservice.getCartItemByUuid(uuid);
 		return new ResponseEntity<CartItems>(cartItems, HttpStatus.OK);
 
 		// return ResponseEntity.ok(cartservice.getCartItemById(cartitem_id));
 
 	}
-	
 
 	// fetch All cart item ===> http://localhost:9090/cartitem
 	@GetMapping
@@ -51,38 +50,28 @@ public class CartItemController {
 	}
 
 	// add cart item ==> http://localhost:9090/cartitem
+
 	@PostMapping
 	public ResponseEntity<CartItems> addCartItem(@RequestBody CartItems cartItems) {
 
 		logger.info("CartItem Controller :: addCartItem : Request ->  " + cartItems);
-
-		// get unique id
-		UUID uuid = Generators.timeBasedGenerator().generate();
-
-		// set any field or data for generate UUID
-		cartItems.setUuid(uuid.toString());
-
-		cartservice.addCardItem(cartItems);
-		
-		return new ResponseEntity<CartItems>(HttpStatus.CREATED);
+		return new ResponseEntity<CartItems>(cartservice.addCardItem(cartItems), HttpStatus.CREATED);
 	}
 
 	// update cart item.===> http://localhost:9090/cartitem/5
-	@PutMapping("{cartitem_id}")
-	public ResponseEntity<CartItems> updateCartItem(@PathVariable("cartitem_id") long cartitem_id,
+	@PutMapping("{uuid}")
+	public ResponseEntity<CartItems> updateCartItem(@PathVariable("uuid") String uuid,
 			@RequestBody CartItems cartItems) {
 		logger.info("CartItem Controller :: updateCartItem : Request ->  " + cartItems);
-		return new ResponseEntity<CartItems>(cartservice.updateCartItem(cartItems, cartitem_id), HttpStatus.OK);
+		return new ResponseEntity<CartItems>(cartservice.updateCartItem(cartItems, uuid), HttpStatus.OK);
 	}
 
 	// delete cart item ===> http://localhost:9090/cartitem/5
-	@DeleteMapping("{cartitem_id}")
-	public ResponseEntity<String> deleteCartItem(@PathVariable("cartitem_id") Long cartitem_id) {
-		logger.info("CartItem Controller :: deleteCartItem : CartItem ID ->  " + cartitem_id);
-		cartservice.deleteCartItem(cartitem_id);
+	@DeleteMapping("{uuid}")
+	public ResponseEntity<String> deleteCartItem(@PathVariable("uuid") String uuid) {
+		logger.info("CartItem Controller :: deleteCartItem : CartItem ID ->  " + uuid);
+		cartservice.deleteCartItem(uuid);
 		return new ResponseEntity<String>("Employee deleted successfully!..", HttpStatus.OK);
 
 	}
-
 }
-
