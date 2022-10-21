@@ -4,45 +4,53 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.Builder;
+import lombok.Data;
+
+@Data
 @Entity
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
-@Table(name="Cartitems ")
+@Table(name = "Cartitems ")
+@Builder
 public class CartItems {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private long cartitem_id;
 
 	private String productname;
 
 	private String description;
 
-	private  long quantity;
-	
+	private long quantity;
+
 	private double price;
 
 	private double totalprice;
-	
-	@ManyToOne
-	private Customers customers;
+
+	private String uuid;
+
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String customer_id;
+
+	@Transient
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	private String customer_uuid;
+
+//	@ManyToOne
+//	private Customers customers;
 
 	public CartItems() {
-		
+
 	}
 
 	public CartItems(long cartitem_id, String productname, String description, long quantity, double price,
-			double totalprice, Customers customers) {
+			double totalprice, String uuid, String customer_id, String customer_uuid) {
 		super();
 		this.cartitem_id = cartitem_id;
 		this.productname = productname;
@@ -50,7 +58,9 @@ public class CartItems {
 		this.quantity = quantity;
 		this.price = price;
 		this.totalprice = totalprice;
-		this.customers = customers;
+		this.uuid = uuid;
+		this.customer_id = customer_id;
+		this.customer_uuid = customer_uuid;
 	}
 
 	public long getCartitem_id() {
@@ -101,21 +111,37 @@ public class CartItems {
 		this.totalprice = totalprice;
 	}
 
-	public Customers getCustomers() {
-		return customers;
+	public String getUuid() {
+		return uuid;
 	}
 
-	public void setCustomers(Customers customers) {
-		this.customers = customers;
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
+	public String getCustomer_id() {
+		return customer_id;
+	}
+
+	public void setCustomer_id(String customer_id) {
+		this.customer_id = customer_id;
+	}
+
+	public String getCustomer_uuid() {
+		return customer_uuid;
+	}
+
+	public void setCustomer_uuid(String customer_uuid) {
+		this.customer_uuid = customer_uuid;
 	}
 
 	@Override
 	public String toString() {
 		return "CartItems [cartitem_id=" + cartitem_id + ", productname=" + productname + ", description=" + description
-				+ ", quantity=" + quantity + ", price=" + price + ", totalprice=" + totalprice + ", customers="
-				+ customers + "]";
+				+ ", quantity=" + quantity + ", price=" + price + ", totalprice=" + totalprice + ", uuid=" + uuid
+				+ ", customer_id=" + customer_id + ", customer_uuid=" + customer_uuid + "]";
 	}
-
+	
 	
 
 }
