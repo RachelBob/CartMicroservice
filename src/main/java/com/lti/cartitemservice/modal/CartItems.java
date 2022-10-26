@@ -22,18 +22,13 @@ public class CartItems {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private long cartitem_id;
-
 	private String productname;
-
 	private String description;
-
 	private long quantity;
-
 	private double price;
-
 	private double totalprice;
-
 	private String uuid;
+	private String category;
 
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String customer_id;
@@ -50,7 +45,7 @@ public class CartItems {
 	}
 
 	public CartItems(long cartitem_id, String productname, String description, long quantity, double price,
-			double totalprice, String uuid, String customer_id, String customer_uuid) {
+			double totalprice, String uuid, String customer_id, String customer_uuid, String category) {
 		super();
 		this.cartitem_id = cartitem_id;
 		this.productname = productname;
@@ -61,6 +56,7 @@ public class CartItems {
 		this.uuid = uuid;
 		this.customer_id = customer_id;
 		this.customer_uuid = customer_uuid;
+		this.category = category;
 	}
 
 	public long getCartitem_id() {
