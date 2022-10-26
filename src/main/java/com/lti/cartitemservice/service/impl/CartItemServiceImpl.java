@@ -59,8 +59,8 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 		return repository.save(cartItems);
 	}	
 	
-	public CartItems updateCartItem(CartItems cartItems, String uuid) {
-		CartItems items = repository.findCartItemByUuid(uuid).get();
+	public CartItems updateCartItem(CartItems cartItems) {
+		CartItems items = repository.findCartItemByUuid(cartItems.getUuid()).get();
 		// .orElseThrow(() -> new ResourceNotFoundException("CartItem", "Id", id));
 
 		items.setDescription(cartItems.getDescription());
@@ -68,6 +68,7 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 		items.setProductname(cartItems.getProductname());
 		items.setQuantity(cartItems.getQuantity());
 		items.setTotalprice(cartItems.getTotalprice());
+		items.setCategory(cartItems.getCategory());
 		repository.save(items);
 		return items;
 

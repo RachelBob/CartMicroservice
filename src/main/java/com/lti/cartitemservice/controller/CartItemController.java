@@ -30,48 +30,40 @@ public class CartItemController {
 	@Autowired
 	private CartItemService<CartItems, Long> cartservice;
 
-	// get cart item by UUID ===> http://localhost:9090/cartitem/5
-	@GetMapping("{uuid}")
+	//get cart item by UUID ===> http://localhost:9090/cartitem/5
+	@GetMapping("/findbyuuid/{uuid}")
 	public ResponseEntity<CartItems> getCartItemId(@PathVariable("uuid") String uuid) {
 		logger.info("CartItem Controller :: getCartItemId : CartItem UUID ->  " + uuid);
 		CartItems cartItems = cartservice.getCartItemByUuid(uuid);
 		return new ResponseEntity<CartItems>(cartItems, HttpStatus.OK);
-
-		// return ResponseEntity.ok(cartservice.getCartItemById(cartitem_id));
-
 	}
 
-	// fetch All cart item ===> http://localhost:9090/cartitem
-	@GetMapping
+	//fetch All cart item ===> http://localhost:9090/cartitem
+	@GetMapping("/findall")
 	public ResponseEntity<List<CartItems>> getAllCartItems() {
 		logger.info("CartItem Controller :: getAllCartItems  ");
 		return ResponseEntity.ok(cartservice.getAllCartItems());
-
 	}
 
-	// add cart item ==> http://localhost:9090/cartitem
-
-	@PostMapping
+	//add cart item ==> http://localhost:9090/cartitem
+	@PostMapping("/add")
 	public ResponseEntity<CartItems> addCartItem(@RequestBody CartItems cartItems) {
-
 		logger.info("CartItem Controller :: addCartItem : Request ->  " + cartItems);
 		return new ResponseEntity<CartItems>(cartservice.addCardItem(cartItems), HttpStatus.CREATED);
 	}
 
-	// update cart item.===> http://localhost:9090/cartitem/5
-	@PutMapping("{uuid}")
-	public ResponseEntity<CartItems> updateCartItem(@PathVariable("uuid") String uuid,
-			@RequestBody CartItems cartItems) {
+	//update cart item.===> http://localhost:9090/cartitem/5
+	@PutMapping("/update")
+	public ResponseEntity<CartItems> updateCartItem(@RequestBody CartItems cartItems) {
 		logger.info("CartItem Controller :: updateCartItem : Request ->  " + cartItems);
-		return new ResponseEntity<CartItems>(cartservice.updateCartItem(cartItems, uuid), HttpStatus.OK);
+		return new ResponseEntity<CartItems>(cartservice.updateCartItem(cartItems), HttpStatus.OK);
 	}
 
-	// delete cart item ===> http://localhost:9090/cartitem/5
-	@DeleteMapping("{uuid}")
+	//delete cart item ===> http://localhost:9090/cartitem/5
+	@DeleteMapping("/delete/{uuid}")
 	public ResponseEntity<String> deleteCartItem(@PathVariable("uuid") String uuid) {
 		logger.info("CartItem Controller :: deleteCartItem : CartItem ID ->  " + uuid);
 		cartservice.deleteCartItem(uuid);
-		return new ResponseEntity<String>("Employee deleted successfully!..", HttpStatus.OK);
-
+		return new ResponseEntity<String>("Cart Item deleted successfully!..", HttpStatus.OK);
 	}
 }

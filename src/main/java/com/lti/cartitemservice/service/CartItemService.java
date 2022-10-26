@@ -10,7 +10,7 @@ public interface CartItemService<T,ID> {
 	
 	  CartItems addCardItem(CartItems cartItems);
     
-    CartItems updateCartItem(CartItems cartItems,String uuid);
+    CartItems updateCartItem(CartItems cartItems);
 	
     void deleteCartItem(String uuid);
     
