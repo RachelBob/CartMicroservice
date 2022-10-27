@@ -3,11 +3,12 @@ package com.lti.cartitemservice.service.impl;
 import java.util.List;
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.uuid.Generators;
 import com.lti.cartitemservice.consumer.CustomerDetailsConsumer;
 import com.lti.cartitemservice.modal.CartItems;
@@ -25,16 +26,13 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 
 	@Override
 	public CartItems getCartItemByUuid(String uuid) {
-
 		return repository.findCartItemByUuid(uuid).get();
 		// .orElseThrow(() -> new CartItemNotExistsException("CartItem UUID not
 		// Present"+uuid));
-
 	}
 
 	@Override
 	public List<CartItems> getAllCartItems() {
-
 		return repository.findAll();
 	}
 
@@ -52,10 +50,8 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 			cartItems.setUuid(uuid.toString());
 			cartItems.setCustomer_id(id);
 		} catch (JSONException e) {
-			
+			e.printStackTrace();
 		}
-		
-		
 		return repository.save(cartItems);
 	}	
 	
@@ -71,13 +67,42 @@ public class CartItemServiceImpl implements CartItemService<CartItems, Long> {
 		items.setCategory(cartItems.getCategory());
 		repository.save(items);
 		return items;
-
 	}
 
 	@Override
 	public void deleteCartItem(String uuid) {
+		CartItems cartItemObj = repository.findCartItemByUuid(uuid).get();
+		repository.deleteById(cartItemObj.getCartitem_id());
+	}
 	
-		repository.findCartItemByUuid(uuid).get();
+	@Override
+	@Transactional
+	public boolean deleteAllCartItemByCustomerUUID(String customerUUID) {
+		String custStrObj = customerConsumer.getCustomerByUUID(customerUUID);
+		JSONObject custJsonObj;
+		boolean isCartDelete = false;
+		int isCartDeleted = 0;
+		try {
+			custJsonObj = new JSONObject(custStrObj);
+			isCartDeleted = repository.deleteByCustomer_id(custJsonObj.get("customerId").toString());
+			isCartDelete = (isCartDeleted > 0);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return isCartDelete;
+	}
+	
+	public List<CartItems> getAllCartItemsByCustomerUuid(String customerUUID) {
+		String custStrObj = customerConsumer.getCustomerByUUID(customerUUID);
+		JSONObject custJsonObj;
+		List<CartItems> cartItemList = null;
+		try {
+			custJsonObj = new JSONObject(custStrObj);
+			cartItemList = repository.findByCustomer_id(custJsonObj.get("customerId").toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return cartItemList;
 	}
 
 }

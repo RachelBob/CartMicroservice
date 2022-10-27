@@ -6,9 +6,9 @@ import com.lti.cartitemservice.modal.CartItems;
 import com.sun.xml.bind.v2.model.core.ID;
 
 public interface CartItemService<T,ID> {
-	  T getCartItemByUuid(String uuid);
+	T getCartItemByUuid(String uuid);
 	
-	  CartItems addCardItem(CartItems cartItems);
+	CartItems addCardItem(CartItems cartItems);
     
     CartItems updateCartItem(CartItems cartItems);
 	
@@ -16,7 +16,7 @@ public interface CartItemService<T,ID> {
     
 	List<T> getAllCartItems();
 	
+	List<CartItems> getAllCartItemsByCustomerUuid(String csutomerUUID);
 	
-	
-
+	boolean deleteAllCartItemByCustomerUUID(String csutomerUUID);
 }

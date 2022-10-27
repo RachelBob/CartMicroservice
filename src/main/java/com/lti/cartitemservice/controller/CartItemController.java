@@ -1,8 +1,6 @@
 package com.lti.cartitemservice.controller;
 
 import java.util.List;
-import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.fasterxml.uuid.Generators;
 import com.lti.cartitemservice.modal.CartItems;
 import com.lti.cartitemservice.service.CartItemService;
 
@@ -66,4 +62,15 @@ public class CartItemController {
 		cartservice.deleteCartItem(uuid);
 		return new ResponseEntity<String>("Cart Item deleted successfully!..", HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/deleteallbycustomeruuid/{customeruuid}")
+	public ResponseEntity<Boolean> deleteAllCartItemByCustomerUUID(@PathVariable("customeruuid") String customeruuid) {
+		return new ResponseEntity<Boolean>(cartservice.deleteAllCartItemByCustomerUUID(customeruuid), HttpStatus.OK);
+	}
+	
+	@GetMapping("/findbycustomeruuid/{customeruuid}")
+	public ResponseEntity<List<CartItems>> getWishlistByCustomer(@PathVariable(value="customeruuid") String customeruuid) {
+		List<CartItems> response = cartservice.getAllCartItemsByCustomerUuid(customeruuid);
+		return ResponseEntity.ok(response);
+	} 
 }
