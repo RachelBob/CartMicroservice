@@ -130,12 +130,20 @@ public class CartItems {
 	public void setCustomer_uuid(String customer_uuid) {
 		this.customer_uuid = customer_uuid;
 	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
 
 	@Override
 	public String toString() {
 		return "CartItems [cartitem_id=" + cartitem_id + ", productname=" + productname + ", description=" + description
 				+ ", quantity=" + quantity + ", price=" + price + ", totalprice=" + totalprice + ", uuid=" + uuid
-				+ ", customer_id=" + customer_id + ", customer_uuid=" + customer_uuid + "]";
+				+ ", customer_id=" + customer_id + ", customer_uuid=" + customer_uuid + ", category=" + category + "]";
 	}
 	
 	
